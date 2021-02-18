@@ -13,15 +13,17 @@ function ConvertHandler() {
 
   // object for looking up conversion units, [0] is the correct case, [1] is the conversion unit
   const convObj = {
-    "gal": ["gal","L"],
-    "l": ["L","gal"],
-    "mi": ["mi","km"],
-    "km": ["km","mi"],
-    "lbs": ["lbs","kg"],
-    "kg": ["kg","lbs"]
+    "gal": ["gal","L","gallons","liters"],
+    "l": ["L","gal","liters","gallons"],
+    "mi": ["mi","km","miles","kilometers"],
+    "km": ["km","mi","kilometers","miles"],
+    "lbs": ["lbs","kg","kilograms","pounds"],
+    "kg": ["kg","lbs","pounds","kilograms"]
   }
 
-
+  function round(value, decimals) {
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+  }
   
   this.getNum = function(input) {
 
@@ -90,9 +92,8 @@ function ConvertHandler() {
   };
 
   this.spellOutUnit = function(unit) {
-    let result;
-    
-    return result;
+    // look up the full unit name
+    return convObj[unit.toLowerCase()][2]
   };
   
   this.convert = function(initNum, initUnit) {
@@ -128,12 +129,11 @@ function ConvertHandler() {
         return null;
     }
  
-    return result;
+    return round(result,5);
   };
   
   this.getString = function(initNum, initUnit, returnNum, returnUnit) {
-    let result = `${initNum}` // TODO add full spelling to obj
-
+    let result = `${initNum} ${this.spellOutUnit(initUnit.toLowerCase())} converts to ${returnNum} ${this.spellOutUnit(returnUnit.toLowerCase())}`
     
     return result;
   };
