@@ -1,11 +1,3 @@
-/*
-*
-*
-*       Complete the handler logic below
-*       
-*       
-*/
-
 function ConvertHandler() {
 
   // regex for finding first letter (to determine start of unit)
@@ -17,8 +9,8 @@ function ConvertHandler() {
     "l": ["L","gal","liters","gallons"],
     "mi": ["mi","km","miles","kilometers"],
     "km": ["km","mi","kilometers","miles"],
-    "lbs": ["lbs","kg","kilograms","pounds"],
-    "kg": ["kg","lbs","pounds","kilograms"]
+    "lbs": ["lbs","kg","pounds","kilograms"],
+    "kg": ["kg","lbs","kilograms","pounds"]
   }
 
   function round(value, decimals) {
@@ -26,14 +18,11 @@ function ConvertHandler() {
   }
   
   this.getNum = function(input) {
-
-
-
     // find index of first letter
     const index = input.match(letterRegex).index;
 
-    // if index is zero then return null as there is no number
-    if(index===0) return null;
+    // if index is zero then return 1 as there is no number
+    if(index===0) return 1;
 
     // fetch all characters prior to that first letter
     const gotNum = input.substring(0,index);
@@ -80,6 +69,10 @@ function ConvertHandler() {
   
   this.getReturnUnit = function(initUnit) {
 
+    // if init unit is null, return early
+    if(initUnit===null)
+      return null
+
     // look up initunit in convobject
     const unitArr = convObj[initUnit.toLowerCase()];
 
@@ -102,15 +95,18 @@ function ConvertHandler() {
     const lbsToKg = 0.453592;
     const miToKm = 1.60934;
 
+    // if init unit is null reutrn earlyu
+    if(initUnit===null||initNum===null)
+      return null
 
     let result;
-
+    let lowerinitUnit=initUnit.toLowerCase()
     // swithc on the init unit to figure out the sum
-    switch(initUnit) {
+    switch(lowerinitUnit) {
       case "gal": 
         result = initNum *= galToL; 
         break;
-      case "L": 
+      case "l": 
         result = initNum /= galToL;
         break;
       case "lbs": 
@@ -133,6 +129,10 @@ function ConvertHandler() {
   };
   
   this.getString = function(initNum, initUnit, returnNum, returnUnit) {
+
+    if(initUnit===null||initNum===null)
+      return null
+
     let result = `${initNum} ${this.spellOutUnit(initUnit.toLowerCase())} converts to ${returnNum} ${this.spellOutUnit(returnUnit.toLowerCase())}`
     
     return result;
