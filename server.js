@@ -4,6 +4,7 @@ const express     = require('express');
 const bodyParser  = require('body-parser');
 const expect      = require('chai').expect;
 const cors        = require('cors');
+const path = require("path")
 require('dotenv').config();
 
 const apiRoutes         = require('./routes/api.js');
@@ -18,6 +19,9 @@ app.use(cors({origin: '*'})); //For FCC testing purposes only
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// point to react build folder
+app.use(express.static(path.join(__dirname,'client', 'build')));
 
 //Index page (static HTML)
 app.route('/')
@@ -39,8 +43,8 @@ app.use(function(req, res, next) {
 });
 
 //Start our server and tests!
-app.listen(process.env.PORT || 3000, function () {
-  console.log("Listening on port " + process.env.PORT);
+app.listen(process.env.EXPRESSPORT || 3000, function () {
+  console.log("Listening on port " + process.env.EXPRESSPORT);
   if(process.env.NODE_ENV==='test') {
     console.log('Running Tests...');
     setTimeout(function () {
